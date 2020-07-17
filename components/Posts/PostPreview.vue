@@ -18,7 +18,7 @@ export default {
   name: "PostPreview",
   props: {
     id: {
-      type: String,
+      type: Number,
       required: true
     },
     isAdmin: {
