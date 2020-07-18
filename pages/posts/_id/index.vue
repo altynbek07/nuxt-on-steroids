@@ -1,23 +1,43 @@
 <template>
   <div class="single-post-page">
     <section class="post">
-      <h1 class="post-title">Title</h1>
+      <h1 class="post-title">{{ loadedPost.title }}</h1>
       <div class="post-details">
-        <div class="post-detail">Last updated on XXX</div>
-        <div class="post-detail">Written by NAME</div>
+        <div class="post-detail">
+          Last updated on {{ loadedPost.updatedDate }}
+        </div>
+        <div class="post-detail">Written by {{ loadedPost.author }}</div>
       </div>
-      <p class="post-content">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Suscipit, ad dolores quis fuga ratione dicta vel debitis, facere sunt illum quia doloribus possimus maxime tempore deleniti! Voluptate pariatur nesciunt eligendi.</p>
+      <p class="post-content">
+        {{ loadedPost.content }}
+      </p>
     </section>
     <section class="post-feedback">
       <p>
         Let me know what you think about the post, send a mail to
-        <a
-          href="mailto:admin@admin.com"
-        >admin@admin.com</a>
+        <a href="mailto:admin@admin.com">admin@admin.com</a>
       </p>
     </section>
   </div>
 </template>
+<script>
+export default {
+  asyncData({ params }) {
+    return {
+      loadedPost: {
+        id: 1,
+        title: `Title (ID: ${params.id})`,
+        previewText: "Text",
+        author: "Max",
+        updatedDate: new Date(),
+        content: "Some content",
+        thumbnail:
+          "https://techclad.com/wp-content/uploads/2019/02/2018-07-10-image-35.jpg"
+      }
+    };
+  }
+};
+</script>
 <style scoped>
 .single-post-page {
   padding: 30px;
@@ -71,4 +91,3 @@
   color: salmon;
 }
 </style>
-
