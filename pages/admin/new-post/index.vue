@@ -1,7 +1,7 @@
 <template>
   <div class="admin-new-post-page">
     <section class="new-post-form">
-      <AdminPostForm />
+      <AdminPostForm @submit="onSubmitted" />
     </section>
   </div>
 </template>
@@ -12,8 +12,17 @@ import AdminPostForm from "@/components/Admin/AdminPostForm";
 export default {
   layout: "admin",
   components: {
-    AdminPostForm
-  }
+    AdminPostForm,
+  },
+  methods: {
+    async onSubmitted(postData) {
+      await this.$axios.$post(
+        "https://nuxt-on-steroids.firebaseio.com/posts.json",
+        { ...postData, updatedDate: new Date() }
+      );
+      this.$router.push("/admin");
+    },
+  },
 };
 </script>
 

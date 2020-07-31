@@ -1,7 +1,7 @@
 <template>
   <div class="admin-post-page">
     <section class="update-form">
-      <AdminPostForm :post="loadedPost" />
+      <AdminPostForm :post="loadedPost" @submit="onSubmitted" />
     </section>
   </div>
 </template>
@@ -12,19 +12,23 @@ import AdminPostForm from "@/components/Admin/AdminPostForm";
 export default {
   layout: "admin",
   components: {
-    AdminPostForm
+    AdminPostForm,
   },
-  data() {
-    return {
-      loadedPost: {
-        author: "Max",
-        title: "Hi",
-        content: "Cute",
-        thumbnailLink:
-          "https://techclad.com/wp-content/uploads/2019/02/2018-07-10-image-35.jpg"
-      }
-    };
-  }
+  async asyncData({ $axios, params }) {
+    const loadedPost = await $axios.$get(
+      `https://nuxt-on-steroids.firebaseio.com/posts/${params.postId}.json`
+    );
+    return { loadedPost };
+  },
+  methods: {
+    async onSubmitted(editedPost) {
+      await this.$axios.$put(
+        `https://nuxt-on-steroids.firebaseio.com/posts/${this.$route.params.postId}.json`,
+        { ...editedPost, updatedDate: new Date() }
+      );
+      this.$router.push("/admin");
+    },
+  },
 };
 </script>
 
