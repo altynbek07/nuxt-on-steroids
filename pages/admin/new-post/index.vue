@@ -16,10 +16,7 @@ export default {
   },
   methods: {
     async onSubmitted(postData) {
-      await this.$axios.$post(
-        "https://nuxt-on-steroids.firebaseio.com/posts.json",
-        { ...postData, updatedDate: new Date() }
-      );
+      await this.$store.dispatch("addPost", postData);
       this.$router.push("/admin");
     },
   },

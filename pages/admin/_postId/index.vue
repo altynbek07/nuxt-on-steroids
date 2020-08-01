@@ -15,17 +15,14 @@ export default {
     AdminPostForm,
   },
   async asyncData({ $axios, params }) {
-    const loadedPost = await $axios.$get(
+    const data = await $axios.$get(
       `https://nuxt-on-steroids.firebaseio.com/posts/${params.postId}.json`
     );
-    return { loadedPost };
+    return { loadedPost: { ...data, id: params.postId } };
   },
   methods: {
     async onSubmitted(editedPost) {
-      await this.$axios.$put(
-        `https://nuxt-on-steroids.firebaseio.com/posts/${this.$route.params.postId}.json`,
-        { ...editedPost, updatedDate: new Date() }
-      );
+      await this.$store.dispatch("editPost", editedPost);
       this.$router.push("/admin");
     },
   },
