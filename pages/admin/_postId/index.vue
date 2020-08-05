@@ -7,26 +7,27 @@
 </template>
 
 <script>
-import AdminPostForm from "@/components/Admin/AdminPostForm";
+import AdminPostForm from '@/components/Admin/AdminPostForm'
 
 export default {
-  layout: "admin",
+  layout: 'admin',
+  middleware: ['check-auth', 'auth'],
   components: {
-    AdminPostForm,
+    AdminPostForm
   },
   async asyncData({ $axios, params }) {
     const data = await $axios.$get(
       `https://nuxt-on-steroids.firebaseio.com/posts/${params.postId}.json`
-    );
-    return { loadedPost: { ...data, id: params.postId } };
+    )
+    return { loadedPost: { ...data, id: params.postId } }
   },
   methods: {
     async onSubmitted(editedPost) {
-      await this.$store.dispatch("editPost", editedPost);
-      this.$router.push("/admin");
-    },
-  },
-};
+      await this.$store.dispatch('editPost', editedPost)
+      this.$router.push('/admin')
+    }
+  }
+}
 </script>
 
 <style scoped>
