@@ -30,13 +30,13 @@ export default {
   layout: 'admin',
   components: {
     AppControlInput,
-    AppButton
+    AppButton,
   },
   data() {
     return {
       email: '',
       password: '',
-      isLogin: true
+      isLogin: true,
     }
   },
   methods: {
@@ -44,11 +44,11 @@ export default {
       await this.$store.dispatch('authenticateUser', {
         isLogin: this.isLogin,
         email: this.email,
-        password: this.password
+        password: this.password,
       })
       this.$router.push('/admin')
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -2,7 +2,7 @@ import Cookies from 'js-cookie'
 
 export const state = () => ({
   loadedPosts: [],
-  token: null
+  token: null,
 })
 
 export const mutations = {
@@ -23,7 +23,7 @@ export const mutations = {
   },
   clearToken(state) {
     state.token = null
-  }
+  },
 }
 
 export const actions = {
@@ -58,16 +58,16 @@ export const actions = {
     )
     commit('editPost', payload)
   },
-  async authenticateUser({ commit, dispatch }, payload) {
-    const authUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.VUE_APP_FIREBASE_API_KEY}`
+  async authenticateUser({ commit }, payload) {
+    const authUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.firebaseApiKey}`
     if (!payload.isLogin) {
-      const authUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.VUE_APP_FIREBASE_API_KEY}`
+      const authUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.firebaseApiKey}`
     }
 
     const data = await this.$axios.$post(authUrl, {
       email: payload.email,
       password: payload.password,
-      returnSecureToken: true
+      returnSecureToken: true,
     })
 
     commit('setToken', data.idToken)
@@ -83,6 +83,10 @@ export const actions = {
       'expirationDate',
       new Date().getTime() + Number.parseInt(data.expiresIn) * 1000
     )
+
+    await this.$axios.$post(`${process.env.baseUrl}/api/track-data`, {
+      data: 'Authenticated',
+    })
   },
   initAuth({ commit, dispatch }, req) {
     let token
@@ -125,10 +129,10 @@ export const actions = {
       localStorage.removeItem('token')
       localStorage.removeItem('tokenExpiration')
     }
-  }
+  },
 }
 
 export const getters = {
   loadedPosts: state => state.loadedPosts,
-  isAuthenticated: state => state.token !== null
+  isAuthenticated: state => state.token !== null,
 }
